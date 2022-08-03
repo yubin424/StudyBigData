@@ -13,9 +13,8 @@ client_id = 'nqEoZxpJff13YQphw7EJ'
 client_secret = 'qbaq1YzQwm'
 
 #책은 예전 방식 
-'''
-url 접속 요청 후 응답 리턴 함수
-'''
+#url 접속 요청 후 응답 리턴 함수
+
 def getRequestUrl(url):
     req = urllib.request.Request(url)
     req.add_header('X-Naver-Client-Id',client_id)
