@@ -15,7 +15,7 @@ class qTemplate(QWidget):
     # 생성자 : 기본적으로 리턴값을 가지지 않아서 None 을 적음
     def __init__(self) -> None:
         super().__init__()
-        uic.loadUi('./pyqt02/navernews.ui', self)
+        uic.loadUi('./pyqt02/navermovie.ui', self)
         self.initUI()
 
     def initUI(self) -> None:
@@ -29,15 +29,15 @@ class qTemplate(QWidget):
 
     def tblResultSelected(self) -> None:
         selected = self.tblResult.currentRow() # 현재 선택된 열의 인덱스
-        link = self.tblResult.item(selected, 1).text()
+        link = self.tblResult.item(selected, 2).text()
         webbrowser.open(link)
 
     def btnSearchClicked(self) -> None:     # 슬롯(이벤트핸들러)
         jsonResult = []
         totalResult = []
-        keyword = 'news'
+        keyword = 'movie'
         search_word = self.txtSearch.text()
-        display_count = 50
+        display_count = 100
 
         # QMessageBox.information(self, '결과', search_word)
         jsonResult = self.getNaverSearch(keyword, search_word, 1, display_count)
@@ -53,19 +53,23 @@ class qTemplate(QWidget):
     def makeTable(self, result):
         # QT 디자인 프로그램에서도 변경 가능
         self.tblResult.setSelectionMode(QAbstractItemView.SingleSelection)
-        self.tblResult.setColumnCount(2)
+        self.tblResult.setColumnCount(3) # from 2
         self.tblResult.setRowCount(len(result)) # display_count 에 따라서 변경, 현재는 50
-        self.tblResult.setHorizontalHeaderLabels(['기사제목','뉴스링크'])
-        self.tblResult.setColumnWidth(0, 350)
+        self.tblResult.setHorizontalHeaderLabels(['영화제목','상영년도','뉴스링크'])
+        self.tblResult.setColumnWidth(0, 250)
         self.tblResult.setColumnWidth(1, 100)
+        self.tblResult.setColumnWidth(2, 100) # 세번쨰 컬럼 길이
         self.tblResult.setEditTriggers(QAbstractItemView.NoEditTriggers) #readonly
 
         i = 0
         for item in result:
             title = self.strip_tag(item[0]['title'])
-            link = item[0]['originallink']
-            self.tblResult.setItem(i, 0, QTableWidgetItem(title))
-            self.tblResult.setItem(i, 1, QTableWidgetItem(link))
+            subtitle = self.strip_tag(item[0]['subtitle'])
+            pubDate = item[0]['pubDate']
+            link = item[0]['link']
+            self.tblResult.setItem(i, 0, QTableWidgetItem(f'{title} / {subtitle}'))
+            self.tblResult.setItem(i, 1, QTableWidgetItem(pubDate))
+            self.tblResult.setItem(i, 2, QTableWidgetItem(link))
             i += 1
 
     
@@ -83,12 +87,11 @@ class qTemplate(QWidget):
     def getPostData(self, post):
         temp = []
         title = post['title']
-        description = post['description']
-        originallink = post['originallink']
+        subtitle = post['subtitle']
         link = post['link']
         pubDate = post['pubDate']
 
-        temp.append({'title':title, 'description':description, 'originallink':originallink, 'link':link})
+        temp.append({'title':title, 'subtitle':subtitle, 'pubDate':pubDate, 'link':link})
 
         return temp
 
@@ -99,8 +102,9 @@ class qTemplate(QWidget):
         print(url)
         req = urllib.request.Request(url)
         # 네이버 인증 추가
-        req.add_header('X-Naver-Client-Id', '________')
-        req.add_header('X-Naver-Client-Secret', '__________')
+        req.add_header('X-Naver-Client-Id', '_______')
+        req.add_header('X-Naver-Client-Secret', '________')
+
 
         res = urllib.request.urlopen(req)
         if res.getcode() == 200:

@@ -38,3 +38,8 @@
 - PyQt 학습
   - PyQt, Designer 설치
   - PyQt 기본폼 만들기
+
+## PyQt 2
+- PyQt5 학습
+  - QtDesigner 로 UI 생성
+  - 네이버 API로 네이버뉴스, 영화 검색 만들기
