@@ -45,4 +45,4 @@
   - 네이버 API로 네이버뉴스, 영화 검색 만들기 [링크](https://raw.githubusercontent.com/yubin424/StudyBigData/main/image/navernews.png)
   
   
- ![https://raw.githubusercontent.com/yubin424/StudyBigData/main/image/navernews.png]
+ ![네이버 뉴스](https://raw.githubusercontent.com/yubin424/StudyBigData/main/image/navernews.png)
